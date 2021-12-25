@@ -1,0 +1,27 @@
+<h1>New Invoice</h1>
+
+<%= render 'form', invoice: @invoice %>
+<%# <div id="form_area" class="field">
+    <label for="invoice_sub1">Sub1</label>
+    <input type="text" name="invoice[sub1]" id="inputform_0">
+  </div>
+<input type="button" value="フォーム追加" onclick="addForm()"> %>
+<%= link_to 'Back', invoices_path %>
+
+<%# <script>
+var i = 1 ;
+function addForm() {
+    var parent = document.getElementById('form_area');
+    let div_start = '.list'
+    parent.appendChild(div_start);
+    var input_data = document.createElement('input');
+    input_data.type = 'text';
+    input_data.id = 'inputform_' + i;
+    input_data.placeholder = 'フォーム-' + i;
+    // var parent = document.getElementById('form_area');
+    parent.appendChild(input_data);
+    let div_end = 'list'
+    parent.appendChild(div_end);
+    i++ ;
+}
+</script> %>

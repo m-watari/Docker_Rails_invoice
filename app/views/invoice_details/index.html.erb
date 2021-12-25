@@ -1,0 +1,37 @@
+
+
+<h1>Invoice Details</h1>
+<p id="notice"><%= notice %></p>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Quantity</th>
+      <th>Unit</th>
+      <th>Unit price</th>
+      <th>Sort</th>
+      <th>Invoice</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @invoice_details.each do |invoice_detail| %>
+      <tr>
+        <td><%= invoice_detail.title %></td>
+        <td><%= invoice_detail.quantity %></td>
+        <td><%= invoice_detail.unit %></td>
+        <td><%= invoice_detail.unit_price %></td>
+        <td><%= invoice_detail.sort %></td>
+        <td><%= invoice_detail.invoice_id %></td>
+        <td><%= link_to 'Show', invoice_detail %></td>
+        <td><%= link_to 'Edit', edit_invoice_detail_path(invoice_detail) %></td>
+        <td><%= link_to 'Destroy', invoice_detail, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Invoice Detail', new_invoice_detail_path %>
