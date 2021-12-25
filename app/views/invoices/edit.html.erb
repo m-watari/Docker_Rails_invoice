@@ -1,0 +1,175 @@
+<h1>Editing Invoice</h1>
+
+<%= render 'form', invoice: @invoice %>
+<p>
+  <strong>InvoiceDetails:</strong>
+  <% @invoice_details.each do |detail| %>
+    <p>
+    <span class="me-3"><%= detail.title %></span>
+    <span><%= link_to 'Edit', edit_invoice_detail_path(detail) %></span>
+    <span data-bs-toggle="modal" data-bs-target="#editModal">
+      editModal
+    </span>
+    </p>
+  <% end %>
+</p>
+
+<%= link_to 'Show', @invoice %> |
+<%= link_to 'Back', invoices_path %> |
+<!-- Button trigger modal -->
+<span data-bs-toggle="modal" data-bs-target="#postModal" onclick="detailEditModal(id)">
+  Add detail
+</span>
+
+<!--Post Modal -->
+<div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="postModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="detailForm" action="/invoice_details" accept-charset="UTF-8" method="post"  style="display: block;">
+        <input name="utf8" type="hidden" value="&#x2713;" />
+        <input type="hidden" name="authenticity_token" value="gm0wTmpV55yc3vLOMWKxnda4plnHh4ak5k2Ua6ktTk8HTZ5yKjOW7uAn1Pii+hGMzXCqpjAKCzrR0zbYErqO6w==" />
+
+          <div class="field">
+            <label for="invoice_detail_title">Title</label>
+            <input type="text" name="invoice_detail[title]" id="invoice_detail_title" />
+          </div>
+
+          <div class="field">
+            <label for="invoice_detail_quantity">Quantity</label>
+            <input type="number" name="invoice_detail[quantity]" id="invoice_detail_quantity" />
+          </div>
+
+          <div class="field">
+            <label for="invoice_detail_unit">Unit</label>
+            <input type="text" name="invoice_detail[unit]" id="invoice_detail_unit" />
+          </div>
+
+          <div class="field">
+            <label for="invoice_detail_unit_price">Unit price</label>
+            <input type="number" name="invoice_detail[unit_price]" id="invoice_detail_unit_price" />
+          </div>
+
+          <div class="field">
+            <label for="invoice_detail_sort">Sort</label>
+            <input type="number" name="invoice_detail[sort]" id="invoice_detail_sort" />
+          </div>
+
+          <div class="field">
+            <label for="invoice_detail_invoice_id">Invoice</label>
+            <input type="number" name="invoice_detail[invoice_id]" id="invoice_detail_invoice_id" />
+          </div>
+
+          <div class="actions">
+            <input type="submit" name="commit" value="Create Invoice detail" data-disable-with="Create Invoice detail" />
+          </div>
+        </form>
+        <div id="detailDone" style="display: none;">
+          Invoice detail was successfully created.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="window.location.reload();" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="detailPost()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Modal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="detailForm" action="/invoice_details" accept-charset="UTF-8" method="post"  style="display: block;">
+        <input name="utf8" type="hidden" value="&#x2713;" />
+        <input type="hidden" name="authenticity_token" value="gm0wTmpV55yc3vLOMWKxnda4plnHh4ak5k2Ua6ktTk8HTZ5yKjOW7uAn1Pii+hGMzXCqpjAKCzrR0zbYErqO6w==" />
+
+          <div class="field">
+            <label for="invoice_detail_title">Title</label>
+            <input type="text" name="invoice_detail[title]" id="invoice_detail_title" />
+          </div>
+
+          <div class="field">
+            <label for="invoice_detail_quantity">Quantity</label>
+            <input type="number" name="invoice_detail[quantity]" id="invoice_detail_quantity" />
+          </div>
+
+          <div class="field">
+            <label for="invoice_detail_unit">Unit</label>
+            <input type="text" name="invoice_detail[unit]" id="invoice_detail_unit" />
+          </div>
+
+          <div class="field">
+            <label for="invoice_detail_unit_price">Unit price</label>
+            <input type="number" name="invoice_detail[unit_price]" id="invoice_detail_unit_price" />
+          </div>
+
+          <div class="field">
+            <label for="invoice_detail_sort">Sort</label>
+            <input type="number" name="invoice_detail[sort]" id="invoice_detail_sort" />
+          </div>
+
+          <div class="field">
+            <label for="invoice_detail_invoice_id">Invoice</label>
+            <input type="number" name="invoice_detail[invoice_id]" id="invoice_detail_invoice_id" />
+          </div>
+
+          <div class="actions">
+            <input type="submit" name="commit" value="Create Invoice detail" data-disable-with="Create Invoice detail" />
+          </div>
+        </form>
+        <div id="detailDone" style="display: none;">
+          Invoice detail was successfully created.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="window.location.reload();" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="detailPost()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function detailPost() {
+    console.log('post!!')
+    // 変数 = document.getElementsByName(name属性の値);
+    const textbox = document.getElementsByName("authenticity_token")
+    console.log('textbox', textbox)
+    const token = textbox[1].value
+    console.log('authenticity_token', token)
+    fetch("/invoice_details", {
+      method: "POST",
+      headers : new Headers({"Content-type": "application/json"}),
+      body: JSON.stringify({
+        authenticity_token: token, 
+        title: "title4", 
+        quantity: 400, 
+        unit: 400, 
+        unit_price: 400, 
+        sort: 4, 
+        invoice_id: 1
+      })
+    }).then(function(response) {
+      console.log(response.status);//中身を確認
+      if(response.status === 200){
+        document.getElementById("detailForm").style.display ="none";
+        document.getElementById("detailDone").style.display ="block";
+      }else{
+
+      }
+    })
+  }
+  function detailEditModal(id) {
+    
+  }
+</script>
