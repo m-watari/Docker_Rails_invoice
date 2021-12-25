@@ -17,7 +17,7 @@
 <%= link_to 'Show', @invoice %> |
 <%= link_to 'Back', invoices_path %> |
 <!-- Button trigger modal -->
-<span data-bs-toggle="modal" data-bs-target="#postModal">
+<span data-bs-toggle="modal" data-bs-target="#postModal" onclick="detailEditModal(id)">
   Add detail
 </span>
 
@@ -168,5 +168,8 @@
 
       }
     })
+  }
+  function detailEditModal(id) {
+    
   }
 </script>
