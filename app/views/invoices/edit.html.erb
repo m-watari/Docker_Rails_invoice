@@ -4,10 +4,20 @@
 <p>
   <strong>InvoiceDetails:</strong>
   <% @invoice_details.each do |detail| %>
+    <% detail_json = [
+        detail.id, 
+        detail.title, 
+        detail.quantity, 
+        detail.unit, 
+        detail.unit_price, 
+        detail.sort, 
+        detail.invoice_id 
+       ] %>
     <p>
     <span class="me-3"><%= detail.title %></span>
     <span><%= link_to 'Edit', edit_invoice_detail_path(detail) %></span>
-    <span data-bs-toggle="modal" data-bs-target="#editModal">
+    <span><%= link_to 'Destroy', detail, method: :delete, data: { confirm: 'Are you sure?' } %></span>
+    <span data-bs-toggle="modal" data-bs-target="#editModal" onclick="detailEditModal(<%= detail_json %>)">
       editModal
     </span>
     </p>
@@ -17,7 +27,7 @@
 <%= link_to 'Show', @invoice %> |
 <%= link_to 'Back', invoices_path %> |
 <!-- Button trigger modal -->
-<span data-bs-toggle="modal" data-bs-target="#postModal" onclick="detailEditModal(id)">
+<span data-bs-toggle="modal" data-bs-target="#postModal">
   Add detail
 </span>
 
@@ -89,51 +99,57 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="detailForm" action="/invoice_details" accept-charset="UTF-8" method="post"  style="display: block;">
-        <input name="utf8" type="hidden" value="&#x2713;" />
-        <input type="hidden" name="authenticity_token" value="gm0wTmpV55yc3vLOMWKxnda4plnHh4ak5k2Ua6ktTk8HTZ5yKjOW7uAn1Pii+hGMzXCqpjAKCzrR0zbYErqO6w==" />
+        <form id="editDetailForm" action="/invoice_details/22" accept-charset="UTF-8" method="post">
+          <input name="utf8" type="hidden" value="&#x2713;" />
+          <input type="hidden" name="_method" value="patch" />
+          <input type="hidden" name="authenticity_token" value="7wvhV1yU3T7WqXNzPMG2M9GBWcJqu2elA8JCqLh98DB57AWF1B3qA7AkctwRW7oCE8+uuXUcpgBmkdZ/V9Q2XA==" />
 
           <div class="field">
             <label for="invoice_detail_title">Title</label>
-            <input type="text" name="invoice_detail[title]" id="invoice_detail_title" />
+            <input type="number" name="invoice_detail[id]" id="edit_invoice_detail_id" valie/>
+          </div>
+
+          <div class="field">
+            <label for="invoice_detail_title">Title</label>
+            <input type="text" name="invoice_detail[title]" id="edit_invoice_detail_title" valie/>
           </div>
 
           <div class="field">
             <label for="invoice_detail_quantity">Quantity</label>
-            <input type="number" name="invoice_detail[quantity]" id="invoice_detail_quantity" />
+            <input type="number" value="" name="invoice_detail[quantity]" id="edit_invoice_detail_quantity" />
           </div>
 
           <div class="field">
             <label for="invoice_detail_unit">Unit</label>
-            <input type="text" name="invoice_detail[unit]" id="invoice_detail_unit" />
+            <input type="text" value="" name="invoice_detail[unit]" id="edit_invoice_detail_unit" />
           </div>
 
           <div class="field">
             <label for="invoice_detail_unit_price">Unit price</label>
-            <input type="number" name="invoice_detail[unit_price]" id="invoice_detail_unit_price" />
+            <input type="number" value="" name="invoice_detail[unit_price]" id="edit_invoice_detail_unit_price" />
           </div>
 
           <div class="field">
             <label for="invoice_detail_sort">Sort</label>
-            <input type="number" name="invoice_detail[sort]" id="invoice_detail_sort" />
+            <input type="number" value="" name="invoice_detail[sort]" id="edit_invoice_detail_sort" />
           </div>
 
           <div class="field">
             <label for="invoice_detail_invoice_id">Invoice</label>
-            <input type="number" name="invoice_detail[invoice_id]" id="invoice_detail_invoice_id" />
+            <input type="number" value="" name="invoice_detail[invoice_id]" id="edit_invoice_detail_invoice_id" />
           </div>
 
           <div class="actions">
-            <input type="submit" name="commit" value="Create Invoice detail" data-disable-with="Create Invoice detail" />
+            <input type="submit" name="commit" value="Update Invoice detail" data-disable-with="Update Invoice detail" />
           </div>
         </form>
-        <div id="detailDone" style="display: none;">
+        <div id="editDetailDone" style="display: none;">
           Invoice detail was successfully created.
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="window.location.reload();" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="detailPost()">Save changes</button>
+        <button type="button" class="btn btn-primary" onclick="detailEdit()">Save changes</button>
       </div>
     </div>
   </div>
@@ -169,7 +185,44 @@
       }
     })
   }
-  function detailEditModal(id) {
-    
+  function detailEditModal(params) {
+    document.getElementById( "edit_invoice_detail_id" ).value = params[0];
+    document.getElementById( "edit_invoice_detail_title" ).value = params[1];
+    document.getElementById( "edit_invoice_detail_quantity" ).value = params[2];
+    document.getElementById( "edit_invoice_detail_unit" ).value = params[3];
+    document.getElementById( "edit_invoice_detail_unit_price" ).value = params[4];
+    document.getElementById( "edit_invoice_detail_sort" ).value = params[5];
+    document.getElementById( "edit_invoice_detail_invoice_id" ).value = params[6];
+  }
+  function detailEdit() {
+    const edit_invoice_detail_id = document.getElementById( "edit_invoice_detail_id" ).value;
+    const edit_invoice_detail_title = document.getElementById( "edit_invoice_detail_title" ).value;
+    const edit_invoice_detail_quantity = document.getElementById( "edit_invoice_detail_quantity" ).value;
+    const edit_invoice_detail_unit = document.getElementById( "edit_invoice_detail_unit" ).value;
+    const edit_invoice_detail_unit_price = document.getElementById( "edit_invoice_detail_unit_price" ).value;
+    const edit_invoice_detail_sort = document.getElementById( "edit_invoice_detail_sort" ).value;
+    const edit_invoice_detail_invoice_id = document.getElementById( "edit_invoice_detail_invoice_id" ).value;
+    const fetchUrl = '/invoice_details/' + edit_invoice_detail_id;
+    console.log('fetchUrl', fetchUrl)
+    fetch(fetchUrl, {
+      method: "put",
+      headers : new Headers({"Content-type": "application/json"}),
+      body: JSON.stringify({
+        title: edit_invoice_detail_title,
+        quantity: edit_invoice_detail_quantity,
+        unit: edit_invoice_detail_unit,
+        unit_price: edit_invoice_detail_unit_price,
+        sort: edit_invoice_detail_sort,
+        invoice_id: edit_invoice_detail_invoice_id
+      })
+    }).then(function(response) {
+      console.log(response.status);//中身を確認
+      if(response.status === 200){
+        document.getElementById("editDetailForm").style.display ="none";
+        document.getElementById("editDetailDone").style.display ="block";
+      }else{
+
+      }
+    })
   }
 </script>

@@ -39,7 +39,7 @@ class InvoiceDetailsController < ApplicationController
   def update
     respond_to do |format|
       if @invoice_detail.update(invoice_detail_params)
-        format.html { redirect_to @invoice_detail, notice: "Invoice detail was successfully updated." }
+        format.html { render :show, status: :ok, notice: "Invoice detail was successfully updated." }
         format.json { render :show, status: :ok, location: @invoice_detail }
       else
         format.html { render :edit, status: :unprocessable_entity }
