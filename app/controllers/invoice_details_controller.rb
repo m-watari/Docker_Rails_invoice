@@ -52,7 +52,7 @@ class InvoiceDetailsController < ApplicationController
   def destroy
     @invoice_detail.destroy
     respond_to do |format|
-      format.html { redirect_to invoice_details_url, notice: "Invoice detail was successfully destroyed." }
+      format.html { render :show, status: :ok, notice: "Invoice detail was successfully destroyed." }
       format.json { head :no_content }
     end
   end

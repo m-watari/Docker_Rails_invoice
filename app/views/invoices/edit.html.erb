@@ -1,35 +1,86 @@
 <h1>Editing Invoice</h1>
 
-<%= render 'form', invoice: @invoice %>
-<p>
-  <strong>InvoiceDetails:</strong>
-  <% @invoice_details.each do |detail| %>
-    <% detail_json = [
-        detail.id, 
-        detail.title, 
-        detail.quantity, 
-        detail.unit, 
-        detail.unit_price, 
-        detail.sort, 
-        detail.invoice_id 
-       ] %>
-    <p>
-    <span class="me-3"><%= detail.title %></span>
-    <span><%= link_to 'Edit', edit_invoice_detail_path(detail) %></span>
-    <span><%= link_to 'Destroy', detail, method: :delete, data: { confirm: 'Are you sure?' } %></span>
-    <span data-bs-toggle="modal" data-bs-target="#editModal" onclick="detailEditModal(<%= detail_json %>)">
-      editModal
-    </span>
-    </p>
-  <% end %>
-</p>
+<%# <%= render 'form', invoice: @invoice %>
+<div class="row">
+  <div class="col-md-12 col-md-offset-3">
+    <h2>
+      見積もり項目
+      <button data-bs-toggle="modal" data-bs-target="#postModal" class="btn btn-primary btn-sm float-end" type="submit">+</button>
+    </h2>
+    <% subtotal = 0%>
+    <% @invoice_details.each do |detail| %>
+      <% detail_json = [
+          detail.id, 
+          detail.title, 
+          detail.quantity, 
+          detail.unit, 
+          detail.unit_price, 
+          detail.sort, 
+          detail.invoice_id 
+        ] %>
+      <p>
+      <span class="me-3">項目：<%= detail.title %></span>
+      <span class="me-3">数量：<%= detail.quantity %></span>
+      <span class="me-3">単価：<%= detail.unit_price %></span>
+      <span class="me-3">単位：<%= detail.unit %></span>
+      <% subtotal += detail.unit_price * detail.quantity %>
+      <span class="me-3">合計：<%= (detail.unit_price * detail.quantity).to_s(:delimited) %>円</span>
+      <span class="me-3">並び順：<%= detail.sort %></span>
+      <span data-bs-toggle="modal" data-bs-target="#editModal" onclick="detailEditModal(<%= detail_json %>)">
+        editModal
+      </span>
+      <span onclick="detailDelete(<%= detail.id %>)">
+        delete
+      </span>
+    <% end %>
+    <div>
+    合計：<span id='detailsSubtotal'><%= subtotal.to_s(:delimited) %>円<span>
+    </div>
+  <div>
+  </div>
+  </div>
+  <div class="col-md-12 col-md-offset-3">
+    <h2>見積もり設定</h2>
+    <%= form_for(@invoice) do |f| %>
+
+      <%= f.label :title %>
+      <%= f.text_field :title, class: 'form-control' %>
+
+      <%= f.label :company_name %>
+      <%= f.text_field :company_name, class: 'form-control' %>
+
+      <%= f.label :zip %>
+      <%= f.text_field :zip, class: 'form-control' %>
+
+      <%= f.label :pref, "市区町村" %>
+      <%= f.text_field :pref, class: 'form-control' %>
+
+      <%= f.label :address, "住所" %>
+      <%= f.text_field :address, class: 'form-control' %>
+
+      <%= f.label :tel, "TEL" %>
+      <%= f.text_field :tel, class: 'form-control' %>
+
+      <%= f.label :subtotal, "小計" %>
+      <%= f.text_field :subtotal, class: 'form-control getSubtotal'%>
+
+      <%= f.label :tax_rate, "消費税レート" %>
+      <%= f.text_field :tax_rate, {class: 'form-control watchTaxRate', id: 'watchTaxRate'} %>
+
+      <%= f.label :tax, "消費税" %>
+      <%= f.text_field :tax, class: 'form-control watchTax' %>
+
+      <%= f.label :amount, "合計" %>
+      <%= f.text_field :amount, {class: 'form-control', id: 'amount'} %>
+
+      <%= f.submit "Save changes", class: "btn btn-primary mt-3" %>
+    <% end %>
+  </div>
+</div>
 
 <%= link_to 'Show', @invoice %> |
 <%= link_to 'Back', invoices_path %> |
 <!-- Button trigger modal -->
-<span data-bs-toggle="modal" data-bs-target="#postModal">
-  Add detail
-</span>
 
 <!--Post Modal -->
 <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
@@ -46,37 +97,26 @@
 
           <div class="field">
             <label for="invoice_detail_title">Title</label>
-            <input type="text" name="invoice_detail[title]" id="invoice_detail_title" />
+            <input type="text" name="invoice_detail[title]" id="add_invoice_detail_title" />
           </div>
 
           <div class="field">
             <label for="invoice_detail_quantity">Quantity</label>
-            <input type="number" name="invoice_detail[quantity]" id="invoice_detail_quantity" />
+            <input type="number" name="invoice_detail[quantity]" id="add_invoice_detail_quantity" />
           </div>
 
           <div class="field">
             <label for="invoice_detail_unit">Unit</label>
-            <input type="text" name="invoice_detail[unit]" id="invoice_detail_unit" />
+            <input type="text" name="invoice_detail[unit]" id="add_invoice_detail_unit" />
           </div>
 
           <div class="field">
             <label for="invoice_detail_unit_price">Unit price</label>
-            <input type="number" name="invoice_detail[unit_price]" id="invoice_detail_unit_price" />
+            <input type="number" name="invoice_detail[unit_price]" id="add_invoice_detail_unit_price" />
           </div>
+            <input type="hidden" name="invoice_detail[sort]" id="add_invoice_detail_sort" value="0" />
+            <input type="hidden" name="invoice_detail[invoice_id]" id="add_invoice_detail_invoice_id" value="<%= params[:id] %>" />
 
-          <div class="field">
-            <label for="invoice_detail_sort">Sort</label>
-            <input type="number" name="invoice_detail[sort]" id="invoice_detail_sort" />
-          </div>
-
-          <div class="field">
-            <label for="invoice_detail_invoice_id">Invoice</label>
-            <input type="number" name="invoice_detail[invoice_id]" id="invoice_detail_invoice_id" />
-          </div>
-
-          <div class="actions">
-            <input type="submit" name="commit" value="Create Invoice detail" data-disable-with="Create Invoice detail" />
-          </div>
         </form>
         <div id="detailDone" style="display: none;">
           Invoice detail was successfully created.
@@ -84,7 +124,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="window.location.reload();" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="detailPost()">Save changes</button>
+        <button type="button" id="postDetailModalBtn" class="btn btn-primary" onclick="detailPost()">Save changes</button>
       </div>
     </div>
   </div>
@@ -136,7 +176,7 @@
 
           <div class="field">
             <label for="invoice_detail_invoice_id">Invoice</label>
-            <input type="number" value="" name="invoice_detail[invoice_id]" id="edit_invoice_detail_invoice_id" />
+            <input type="hidden" value="" name="invoice_detail[invoice_id]" id="edit_invoice_detail_invoice_id" />
           </div>
 
           <div class="actions">
@@ -149,36 +189,68 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="window.location.reload();" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="detailEdit()">Save changes</button>
+        <button type="button" id="editDetailModalBtn" class="btn btn-primary" onclick="detailEdit()">Save changes</button>
       </div>
     </div>
   </div>
 </div>
 
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
 <script>
+window.onload = function(){
+  let detailsSubtotal = <%= subtotal %>
+  // let getSubtotal = document.getElementsByClassName("getSubtotal");
+  // let watchTax = document.getElementsByClassName("watchTax");
+  let taxRate = document.getElementsByClassName("watchTaxRate").item(0).value / 100;
+  let detailsTax = detailsSubtotal * taxRate;
+  let amount = detailsSubtotal + detailsTax;
+  document.getElementById("amount").value = amount;
+  document.getElementsByClassName("getSubtotal").item(0).value = detailsSubtotal;
+  document.getElementsByClassName("watchTax").item(0).value = detailsTax;
+  // 入力イベント監視
+  let rate = document.getElementsByClassName('watchTax');
+  // rate.addEventListener('keyup', inputText);
+}
+function inputText(e) {
+  console.log('inputText作動！！')
+    // document.getElementById("mail_error").style.display = "none";
+    // let taxRate = document.getElementsByClassName("watchTaxRate").item(0).value / 100;
+    // let detailsTax = detailsSubtotal * taxRate
+    // document.getElementsByClassName("watchTax").item(0).value = detailsTax;
+
+}
   function detailPost() {
     console.log('post!!')
     // 変数 = document.getElementsByName(name属性の値);
-    const textbox = document.getElementsByName("authenticity_token")
-    console.log('textbox', textbox)
-    const token = textbox[1].value
-    console.log('authenticity_token', token)
-    fetch("/invoice_details", {
+    const add_invoice_detail_title = document.getElementById( "add_invoice_detail_title" ).value;
+    const add_invoice_detail_quantity = document.getElementById( "add_invoice_detail_quantity" ).value;
+    const add_invoice_detail_unit = document.getElementById( "add_invoice_detail_unit" ).value;
+    const add_invoice_detail_unit_price = document.getElementById( "add_invoice_detail_unit_price" ).value;
+    const add_invoice_detail_sort = document.getElementById( "add_invoice_detail_sort" ).value;
+    const add_invoice_detail_invoice_id = document.getElementById( "add_invoice_detail_invoice_id" ).value;
+    const fetchUrl = '/invoice_details/';
+    fetch(fetchUrl, {
       method: "POST",
       headers : new Headers({"Content-type": "application/json"}),
       body: JSON.stringify({
-        authenticity_token: token, 
-        title: "title4", 
-        quantity: 400, 
-        unit: 400, 
-        unit_price: 400, 
-        sort: 4, 
-        invoice_id: 1
+        title: add_invoice_detail_title, 
+        quantity: add_invoice_detail_quantity, 
+        unit: add_invoice_detail_unit, 
+        unit_price: add_invoice_detail_unit_price, 
+        sort: add_invoice_detail_sort, 
+        invoice_id: add_invoice_detail_invoice_id
       })
     }).then(function(response) {
       console.log(response.status);//中身を確認
       if(response.status === 200){
         document.getElementById("detailForm").style.display ="none";
+        document.getElementById("postDetailModalBtn").style.display ="none";
         document.getElementById("detailDone").style.display ="block";
       }else{
 
@@ -220,6 +292,23 @@
       if(response.status === 200){
         document.getElementById("editDetailForm").style.display ="none";
         document.getElementById("editDetailDone").style.display ="block";
+      }else{
+
+      }
+    })
+  }
+  function detailDelete(id){
+    const fetchUrl = '/invoice_details/' + id;
+    fetch(fetchUrl, {
+      method: "delete",
+      headers : new Headers({"Content-type": "application/json"}),
+      body: JSON.stringify({
+        id: id
+      })
+    }).then(function(response) {
+      console.log(response.status);//中身を確認
+      if(response.status === 200){
+        window.location.reload();
       }else{
 
       }
