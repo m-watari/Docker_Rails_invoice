@@ -7,32 +7,36 @@
       見積もり項目
       <button data-bs-toggle="modal" data-bs-target="#postModal" class="btn btn-primary btn-sm float-end" type="submit">+</button>
     </h2>
-    <% subtotal = 0%>
-    <% @invoice_details.each do |detail| %>
-      <% detail_json = [
-          detail.id, 
-          detail.title, 
-          detail.quantity, 
-          detail.unit, 
-          detail.unit_price, 
-          detail.sort, 
-          detail.invoice_id 
-        ] %>
-      <p>
-      <span class="me-3">項目：<%= detail.title %></span>
-      <span class="me-3">数量：<%= detail.quantity %></span>
-      <span class="me-3">単価：<%= detail.unit_price %></span>
-      <span class="me-3">単位：<%= detail.unit %></span>
-      <% subtotal += detail.unit_price * detail.quantity %>
-      <span class="me-3">合計：<%= (detail.unit_price * detail.quantity).to_s(:delimited) %>円</span>
-      <span class="me-3">並び順：<%= detail.sort %></span>
-      <span data-bs-toggle="modal" data-bs-target="#editModal" onclick="detailEditModal(<%= detail_json %>)">
-        editModal
-      </span>
-      <span onclick="detailDelete(<%= detail.id %>)">
-        delete
-      </span>
-    <% end %>
+      <ul class="sortable">
+      <% subtotal = 0%>
+      <% @invoice_details.each do |detail| %>
+        <% detail_json = [
+            detail.id, 
+            detail.title, 
+            detail.quantity, 
+            detail.unit, 
+            detail.unit_price, 
+            detail.sort, 
+            detail.invoice_id 
+          ] %>
+        <li id="<%= detail.id %>">
+          <span class="me-3">項目：<%= detail.title %></span>
+          <span class="me-3">数量：<%= detail.quantity %></span>
+          <span class="me-3">単価：<%= detail.unit_price %></span>
+          <span class="me-3">単位：<%= detail.unit %></span>
+          <% subtotal += detail.unit_price * detail.quantity %>
+          <span class="me-3">合計：<%= (detail.unit_price * detail.quantity).to_s(:delimited) %>円</span>
+          <span class="me-3">並び順：<%= detail.sort %></span>
+          <span data-bs-toggle="modal" data-bs-target="#editModal" onclick="detailEditModal(<%= detail_json %>)">
+            editModal
+          </span>
+          <span onclick="detailDelete(<%= detail.id %>)">
+            delete
+          </span>
+        </li>
+        <% end %>
+      </ul>
+    <div class="btn btn-primary" onclick="sortPost()">Save</div>
     <div>
     合計：<span id='detailsSubtotal'><%= subtotal.to_s(:delimited) %>円<span>
     </div>
@@ -207,7 +211,9 @@ window.onload = function(){
   let detailsSubtotal = <%= subtotal %>
   // let getSubtotal = document.getElementsByClassName("getSubtotal");
   // let watchTax = document.getElementsByClassName("watchTax");
-  let taxRate = document.getElementsByClassName("watchTaxRate").item(0).value / 100;
+  let taxRate = document.getElementsByClassName("watchTaxRate").item(0).value
+  if( !taxRate ) document.getElementsByClassName("watchTaxRate").item(0).value(10)
+  // let taxRate = document.getElementsByClassName("watchTaxRate").item(0).value / 100;
   let detailsTax = detailsSubtotal * taxRate;
   let amount = detailsSubtotal + detailsTax;
   document.getElementById("amount").value = amount;
@@ -313,5 +319,35 @@ function inputText(e) {
 
       }
     })
+  }
+
+  $(function() {
+      $(".sortable").sortable();
+      $(".sortable").disableSelection();
+  });
+
+  function sortPost() {
+    var result = $(".sortable").sortable("toArray");
+    // ?console.log('result:', result.length);
+
+    for (let i = 0; i < result.length; i++) {
+      console.log('loop:', result[i]);
+      const fetchUrl = '/invoice_details/' + result[i]
+      console.log('fetchUrl', fetchUrl)
+      fetch(fetchUrl, {
+        method: "put",
+        headers : new Headers({"Content-type": "application/json"}),
+        body: JSON.stringify({
+          sort: i + 1,
+        })
+      }).then(function(response) {
+        console.log(response.status);//中身を確認
+        if(response.status === 200){
+          console.log('Done!!')
+        }else{
+          console.log('Error!!')
+        }
+      })
+    }
   }
 </script>

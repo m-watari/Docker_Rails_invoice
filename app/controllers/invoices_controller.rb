@@ -8,7 +8,7 @@ class InvoicesController < ApplicationController
 
   # GET /invoices/1 or /invoices/1.json
   def show
-    @invoice_details = @invoice.invoice_details.includes(:invoice).all
+    @invoice_details = @invoice.invoice_details.includes(:invoice).all.order(sort: "asc")
   end
 
   # GET /invoices/new
@@ -18,7 +18,7 @@ class InvoicesController < ApplicationController
 
   # GET /invoices/1/edit
   def edit
-    @invoice_details = @invoice.invoice_details.includes(:invoice).all
+    @invoice_details = @invoice.invoice_details.includes(:invoice).all.order(sort: "asc")
     @invoice_detail = InvoiceDetail.new
   end
 
