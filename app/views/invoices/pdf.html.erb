@@ -1,0 +1,66 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @invoice.title %>
+</p>
+
+<p>
+  <strong>Company name:</strong>
+  <%= @invoice.company_name %>
+</p>
+
+<p>
+  <strong>Zip:</strong>
+  <%= @invoice.zip %>
+</p>
+
+<p>
+  <strong>Pref:</strong>
+  <%= @invoice.pref %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @invoice.address %>
+</p>
+
+<p>
+  <strong>Tel:</strong>
+  <%= @invoice.tel %>
+</p>
+
+<p>
+  <strong>Subtotal:</strong>
+  <%= @invoice.subtotal %>
+</p>
+
+<p>
+  <strong>Tax rate:</strong>
+  <%= @invoice.tax_rate %>
+</p>
+
+<p>
+  <strong>Tax:</strong>
+  <%= @invoice.tax %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @invoice.amount %>
+</p>
+
+<p>
+  <strong>Sub1:</strong>
+  <%= @invoice.sub1 %>
+</p>
+
+<p>
+  <strong>InvoiceDetails:</strong>
+  <% @invoice_details.each do |detail| %>
+    <p><%= detail.title %></p>
+  <% end %>
+</p>
+
+<%= link_to 'Edit', edit_invoice_path(@invoice) %> |
+<%= link_to 'Back', invoices_path %>
