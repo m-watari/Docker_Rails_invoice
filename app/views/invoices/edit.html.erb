@@ -69,10 +69,10 @@
       <%= f.text_field :subtotal, class: 'form-control getSubtotal'%>
 
       <%= f.label :tax_rate, "消費税レート" %>
-      <%= f.text_field :tax_rate, {class: 'form-control watchTaxRate', id: 'watchTaxRate'} %>
+      <%= f.text_field :tax_rate, {class: 'form-control watchTaxRate', id: 'watchTaxRate',  oninput: 'inputChange()'} %>
 
       <%= f.label :tax, "消費税" %>
-      <%= f.text_field :tax, class: 'form-control watchTax' %>
+      <%= f.text_field :tax, {class: 'form-control watchTax', id: 'rate'}%>
 
       <%= f.label :amount, "合計" %>
       <%= f.text_field :amount, {class: 'form-control', id: 'amount'} %>
@@ -215,21 +215,26 @@ window.onload = function(){
   if( !taxRate ) document.getElementsByClassName("watchTaxRate").item(0).value(10)
   // let taxRate = document.getElementsByClassName("watchTaxRate").item(0).value / 100;
   let detailsTax = detailsSubtotal * taxRate;
-  let amount = detailsSubtotal + detailsTax;
-  document.getElementById("amount").value = amount;
+  // let amount = detailsSubtotal + detailsTax;
+  // document.getElementById("amount").value = amount;
   document.getElementsByClassName("getSubtotal").item(0).value = detailsSubtotal;
   document.getElementsByClassName("watchTax").item(0).value = detailsTax;
   // 入力イベント監視
-  let rate = document.getElementsByClassName('watchTax');
+  let invoice_subtotal = Number(document.getElementById("invoice_subtotal").value)
+  let rate = Number(invoice_subtotal * taxRate / 100)
+  document.getElementById("rate").value = rate
   // rate.addEventListener('keyup', inputText);
+  let amount = invoice_subtotal + rate;
+  document.getElementById("amount").value = amount;
 }
-function inputText(e) {
+function inputChange() {
   console.log('inputText作動！！')
-    // document.getElementById("mail_error").style.display = "none";
-    // let taxRate = document.getElementsByClassName("watchTaxRate").item(0).value / 100;
-    // let detailsTax = detailsSubtotal * taxRate
-    // document.getElementsByClassName("watchTax").item(0).value = detailsTax;
-
+  let taxRate = document.getElementsByClassName("watchTaxRate").item(0).value
+  let invoice_subtotal = document.getElementById("invoice_subtotal").value
+  let rate = invoice_subtotal * taxRate / 100
+  document.getElementById("rate").value = rate
+  amount = Number(invoice_subtotal + rate);
+  document.getElementById("amount").value = amount;
 }
   function detailPost() {
     console.log('post!!')

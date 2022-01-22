@@ -4,6 +4,7 @@ volumes:
 services:
     web:
         build: .
+        platform: linux/amd64
         ports:
             - '3000:3000'
         volumes:
@@ -18,6 +19,7 @@ services:
             - db
     db:
         image: mysql:5.7
+        platform: linux/amd64
         ports:
             - '3306:3306'
         volumes:
