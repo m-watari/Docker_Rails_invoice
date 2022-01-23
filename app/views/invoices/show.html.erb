@@ -70,6 +70,10 @@
   <strong>Sub1:</strong>
   <%= @invoice.sub1 %>
 </p>
+<p>
+<% pdfLink = '/pdf-download/' + @invoice.id.to_s %>
+</p>
 
 <%= link_to 'Edit', edit_invoice_path(@invoice) %> |
-<%= link_to 'Back', invoices_path %>
+<%= link_to 'Back', invoices_path %> | 
+<%= link_to 'PDF', pdfLink %>
