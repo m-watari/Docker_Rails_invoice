@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :invoices
   resources :members
   # PDF出力
-  get '/pdf-download', to: 'pdf#download', as: 'pdf_download', :format => 'pdf'
+  get '/pdf-download/:id', to: 'pdf#download', as: 'pdf_download', :format => 'pdf'
+  get 'pdf-show/:id' => 'pdf#show', as: 'pdf_show', :format => 'pdf'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

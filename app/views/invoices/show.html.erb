@@ -31,8 +31,22 @@
 </p>
 
 <p>
+  <strong>InvoiceDetails:</strong>
+  <% subTotal = 0%>
+  <% @invoice_details.each do |detail| %>
+    <p>
+    <%= detail.title %>：
+    <%= detail.quantity %>
+    <%= detail.unit %>,
+    <%= detail.unit_price.to_s(:delimited) %>
+    <% subTotal += detail.unit_price%>
+    </p>
+  <% end %>
+</p>
+
+<p>
   <strong>Subtotal:</strong>
-  <%= @invoice.subtotal %>
+  <%= subTotal.to_s(:delimited) %>
 </p>
 
 <p>
@@ -42,24 +56,19 @@
 
 <p>
   <strong>Tax:</strong>
-  <%= @invoice.tax %>
+  <% tax = subTotal * @invoice.tax_rate / 100 %>
+  <%= tax.to_s(:delimited) %>
 </p>
 
 <p>
   <strong>Amount:</strong>
-  <%= @invoice.amount %>
+  <% amount = subTotal + tax %>
+  <%= amount.to_s(:delimited) %>
 </p>
 
 <p>
   <strong>Sub1:</strong>
   <%= @invoice.sub1 %>
-</p>
-
-<p>
-  <strong>InvoiceDetails:</strong>
-  <% @invoice_details.each do |detail| %>
-    <p><%= detail.title %></p>
-  <% end %>
 </p>
 
 <%= link_to 'Edit', edit_invoice_path(@invoice) %> |
