@@ -21,4 +21,7 @@ Things you may want to cover:
 
 * Deployment instructions
 
-* ...test
+local
+・docker-compose up
+・docker-compose exec web bash
+・rails s -b 0.0.0.0

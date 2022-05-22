@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root 'pages#home'
+  devise_for :users
   resources :invoice_details
   resources :invoices
   resources :members
