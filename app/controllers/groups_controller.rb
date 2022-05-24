@@ -8,6 +8,8 @@ class GroupsController < ApplicationController
 
   def show
     @group = Group.find(params[:id])
+    @invoices = Invoice.all
+    logger.debug(@group)
   end
 
   def new
