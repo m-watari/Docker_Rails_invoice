@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :invoice_details
   resources :invoices
   resources :members
+  resources :groups, except: [:destroy]
   # PDF出力
   get '/pdf-download/:id', to: 'pdf#download', as: 'pdf_download', :format => 'pdf'
   get 'pdf-show/:id' => 'pdf#show', as: 'pdf_show', :format => 'pdf'
