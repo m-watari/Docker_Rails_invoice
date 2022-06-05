@@ -7,7 +7,7 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @group = Group.find(params[:id])
+    @group = Group.find(params[:group_id])
     @invoices = Invoice.all
     logger.debug(@group)
   end
@@ -17,7 +17,9 @@ class GroupsController < ApplicationController
   end
 
   def create
+    # group_params.group_id = SecureRandom.uuid
     @group = Group.new(group_params)
+    @group.group_id = SecureRandom.uuid
     @group.owner_id = current_user.id
     if @group.save
       redirect_to groups_path
@@ -44,9 +46,18 @@ class GroupsController < ApplicationController
   end
 
   def ensure_correct_user
-    @group = Group.find(params[:id])
+    @group = Group.find(params[:group_id])
     unless @group.owner_id == current_user.id
       redirect_to groups_path
+    end
+  end
+
+  # DELETE /groups/1 or /groups/1.json
+  def destroy
+    @group.destroy
+    respond_to do |format|
+      format.html { redirect_to groups_url, notice: "group was successfully destroyed." }
+      format.json { head :no_content }
     end
   end
 end

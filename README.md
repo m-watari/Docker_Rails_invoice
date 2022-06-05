@@ -25,3 +25,15 @@ local
 ・docker-compose up
 ・docker-compose exec web bash
 ・rails s -b 0.0.0.0
+
+sample,route
+Rails.application.routes.draw do
+  get 'photos', to: 'photos#index'
+  post 'photos', to: 'photos#create'
+  get 'photos/new', to: 'photos#new', as: 'new_photo'
+  get 'photos/:id/edit', to: 'photos#edit', as: 'edit_photo'
+  get 'photos/:id', to: 'photos#show', as: 'photo'
+  patch 'photos/:id', to: 'photos#update'
+  put 'photos/:id', to: 'photos#update'
+  delete 'photos/:id', to: 'photos#destroy'
+end

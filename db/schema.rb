@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_28_013052) do
+ActiveRecord::Schema.define(version: 2022_06_05_034923) do
 
   create_table "group_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2022_05_28_013052) do
     t.integer "owner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "group_id"
   end
 
   create_table "invoice_details", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -56,6 +57,7 @@ ActiveRecord::Schema.define(version: 2022_05_28_013052) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "group_id"
+    t.string "invoice_id"
   end
 
   create_table "members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

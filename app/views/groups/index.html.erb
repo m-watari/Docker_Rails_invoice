@@ -12,11 +12,13 @@
     <% @groups.each do |group| %>
       <tr>
         <td></td>
-        <td><%= link_to group.name, group_path(group) %></td>
+        <td>
+          <%= link_to group.name, group_path(group_id: group.group_id) %>
+        </td>
         <td><%= group.introduction %></td>
         <td>
           <% if group.owner_id == current_user.id %>
-            <%= link_to 'Edit', edit_group_path(group), class: "btn btn-sm btn-success" %>
+            <%= link_to 'Edit', edit_group_path(group_id: group.group_id), class: "btn btn-sm btn-success" %>
           <% end %>
         </td>
       </tr>
