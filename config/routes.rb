@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   # resources :invoices
   get 'invoices', to: 'invoices#index'
   get 'invoices/:invoice_id', to: 'invoices#show', as: 'invoice'
-  get 'invoices/:invoices_id/edit', to: 'invoices#edit', as:'edit_invoice'
+  get 'invoices/:invoice_id/edit', to: 'invoices#edit', as:'edit_invoice'
+  get 'invoices/new', to: 'invoices#new', as: 'new_invoices'
+  patch 'invoices/:invoice_id', to: 'invoices#update', as: 'update_invoices'
   resources :members
   # resources :groups, except: [:destroy]
   get 'groups', to: 'groups#index'

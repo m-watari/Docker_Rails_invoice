@@ -34,8 +34,10 @@
         <td><%= invoice.tax %></td>
         <td><%= invoice.amount %></td>
         <td><%= invoice.sub1 %></td>
-        <td><%= link_to 'Show', invoice %></td>
-        <td><%= link_to 'Edit', edit_invoice_path(invoice) %></td>
+        <td>
+        <%= link_to 'Show', '/invoices/' + invoice.invoice_id %>
+        </td>
+        <td><%= link_to 'Edit', '/invoices/' + invoice.invoice_id + '/edit' %></td>
         <td><%= link_to 'Destroy', invoice, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -43,5 +45,4 @@
 </table>
 
 <br>
-
-<%= link_to 'New Invoice', new_invoice_path %>
+<%= link_to 'New Invoice', '/invoices/new' %>
