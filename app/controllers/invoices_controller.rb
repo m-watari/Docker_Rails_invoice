@@ -24,6 +24,7 @@ class InvoicesController < ApplicationController
 
   # POST /invoices or /invoices.json
   def create
+    invoice_param.group_id = SecureRandom.uuid
     @invoice = Invoice.new(invoice_params)
 
     respond_to do |format|
@@ -41,7 +42,7 @@ class InvoicesController < ApplicationController
   def update
     respond_to do |format|
       if @invoice.update(invoice_params)
-        format.html { redirect_to @invoice, notice: "Invoice was successfully updated." }
+        format.html { render :edit, notice: "Invoice was successfully updated." }
         format.json { render :show, status: :ok, location: @invoice }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -62,7 +63,8 @@ class InvoicesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_invoice
-      @invoice = Invoice.find(params[:id])
+      @invoice = Invoice.find_by(invoice_id: params[:invoice_id])
+      # member = Member.find_by(name: “Kei”)
     end
 
     # Only allow a list of trusted parameters through.

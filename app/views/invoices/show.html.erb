@@ -1,5 +1,7 @@
 <p id="notice"><%= notice %></p>
 
+<h1 class="mt-5">InvoiceDetail</h1>
+
 <p>
   <strong>Title:</strong>
   <%= @invoice.title %>
@@ -74,6 +76,6 @@
 <% pdfLink = '/pdf-download/' + @invoice.id.to_s %>
 </p>
 
-<%= link_to 'Edit', edit_invoice_path(@invoice) %> |
+<%= link_to 'Edit', @invoice.invoice_id + '/edit' %> |
 <%= link_to 'Back', invoices_path %> | 
 <%= link_to 'PDF', pdfLink %>

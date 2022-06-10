@@ -1,8 +1,20 @@
-<p invoice_id="notice"><%= notice %></p>
-
-<h1 class="mt-5">Invoices</h1>
-
-<table>
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-12'>
+      <h2>Group Detail</h2>
+      <table class='table table-hover table-inverse'>
+        <tr>
+          <td></td>
+          <td><%= @group.name %></td>
+          <td><%= @group.introduction %></td>
+          <td>
+            <% if @group.owner_id == current_user.id %>
+              <%= link_to 'Edit', edit_group_path(@group), class: "btn btn-sm btn-success" %>
+            <% end %>
+          </td>
+        </tr>
+      </table>
+      <table>
   <thead>
     <tr>
       <th>Title</th>
@@ -34,15 +46,13 @@
         <td><%= invoice.tax %></td>
         <td><%= invoice.amount %></td>
         <td><%= invoice.sub1 %></td>
-        <td>
-        <%= link_to 'Show', '/invoices/' + invoice.invoice_id %>
-        </td>
-        <td><%= link_to 'Edit', '/invoices/' + invoice.invoice_id + '/edit' %></td>
+        <td><%= link_to 'Show', invoice %></td>
+        <td><%= link_to 'Edit', edit_invoice_path(invoice) %></td>
         <td><%= link_to 'Destroy', invoice, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-<%= link_to 'New Invoice', '/invoices/new' %>
+    </div>
+  </div>
+</div>
