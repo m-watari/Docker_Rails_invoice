@@ -7,6 +7,7 @@ class GroupsController < ApplicationController
   end
 
   def show
+
     # @group = Group.find(params[:group_id])
     @group = Group.find_by(group_id: params[:group_id])
     @invoices = Invoice.where(group_id: params[:group_id]).order("created_at desc")
