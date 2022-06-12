@@ -58,14 +58,18 @@
 
 <p>
   <strong>Tax:</strong>
-  <% tax = subTotal * @invoice.tax_rate / 100 %>
-  <%= tax.to_s(:delimited) %>
+  <% if subTotal != 0 %>
+    <% tax = subTotal * @invoice.tax_rate / 100 %>
+    <%= tax.to_s(:delimited) %>
+  <% end %>
 </p>
 
 <p>
   <strong>Amount:</strong>
-  <% amount = subTotal + tax %>
-  <%= amount.to_s(:delimited) %>
+  <% if subTotal != 0 %>
+    <% amount = subTotal + tax %>
+    <%= amount.to_s(:delimited) %>
+  <% end %>
 </p>
 
 <p>

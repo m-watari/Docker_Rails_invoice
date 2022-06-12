@@ -5,7 +5,11 @@
       <table class='table table-hover table-inverse'>
         <tr>
           <td></td>
-          <td><%= @group.name %></td>
+          <td>
+          <% if @group.name.nil? %>
+            <%= @group.name %>
+          <% end %>
+          </td>
           <td><%= @group.introduction %></td>
           <td>
             <% if @group.owner_id == current_user.id %>
@@ -46,7 +50,9 @@
         <td><%= invoice.tax %></td>
         <td><%= invoice.amount %></td>
         <td><%= invoice.sub1 %></td>
-        <td><%= link_to 'Show', invoice %></td>
+        <td>
+        <%= link_to 'Show', '/invoices/' + invoice.invoice_id %>
+        </td>
         <td><%= link_to 'Edit', edit_invoice_path(invoice) %></td>
         <td><%= link_to 'Destroy', invoice, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

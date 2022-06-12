@@ -9,6 +9,7 @@ class InvoicesController < ApplicationController
   # GET /invoices/1 or /invoices/1.json
   def show
     @invoice_details = @invoice.invoice_details.includes(:invoice).all.order(sort: "asc")
+    # @invoice_details = InvoiceDetail.all
   end
 
   # GET /invoices/new
@@ -24,12 +25,15 @@ class InvoicesController < ApplicationController
 
   # POST /invoices or /invoices.json
   def create
-    invoice_param.group_id = SecureRandom.uuid
+    @group = Group.find_by(owner_id: current_user.id)
     @invoice = Invoice.new(invoice_params)
+
+    @invoice.invoice_id = SecureRandom.uuid
+    @invoice.group_id = @group.group_id
 
     respond_to do |format|
       if @invoice.save
-        format.html { redirect_to @invoice, notice: "Invoice was successfully created." }
+        format.html { redirect_to '/groups/' + @group.group_id, notice: "Invoice was successfully created." }
         format.json { render :show, status: :created, location: @invoice }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -53,6 +57,7 @@ class InvoicesController < ApplicationController
 
   # DELETE /invoices/1 or /invoices/1.json
   def destroy
+    @invoice = Invoice.find_by(invoice_id: params[:invoice_id])
     @invoice.destroy
     respond_to do |format|
       format.html { redirect_to invoices_url, notice: "Invoice was successfully destroyed." }

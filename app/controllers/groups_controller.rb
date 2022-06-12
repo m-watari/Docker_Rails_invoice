@@ -7,9 +7,15 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @group = Group.find(params[:group_id])
-    @invoices = Invoice.all
-    logger.debug(@group)
+    # @group = Group.find(params[:group_id])
+    @group = Group.find_by(group_id: params[:group_id])
+    @invoices = Invoice.where(group_id: params[:group_id]).order("created_at desc")
+    # @invoices = Invoice.where(group_id: params[:group_id]).includes(:group).order("created_at desc")
+    # @comments = Comment.where(board_id: params[:id]).includes(:user).order("created_at desc")
+    # @invoices = @group.invoices.includes(:group).all.order(sort: "asc")
+    # @invoice_details = @invoice.invoice_details.includes(:invoice).all.order(sort: "asc")
+    # @invoices = Invoice.all
+    # @invoices = Invoice.find_by(id: 1)
   end
 
   def new
