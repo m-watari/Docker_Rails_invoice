@@ -4,11 +4,12 @@
       <h2>Group Detail</h2>
       <table class='table table-hover table-inverse'>
         <tr>
-          <td></td>
           <td>
           <% if @group.name.nil? %>
             <%= @group.name %>
           <% end %>
+          </td>
+          <td>
           </td>
           <td><%= @group.introduction %></td>
           <td>
